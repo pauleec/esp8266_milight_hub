@@ -262,7 +262,7 @@ void applySettings() {
   milightClient->onUpdateBegin(onUpdateBegin);
   milightClient->onUpdateEnd(onUpdateEnd);
 
-  if (settings.mqttServer().length() > 0) {
+  if (WiFi.isConnected() && settings.mqttServer().length() > 0) {
     mqttClient = new MqttClient(settings, milightClient);
     mqttClient->begin();
     mqttClient->onConnect([]() {
@@ -372,6 +372,8 @@ void postConnectSetup() {
 
   delete wifiManager;
   wifiManager = NULL;
+
+  applySettings();
 
   MDNS.addService("http", "tcp", 80);
 
